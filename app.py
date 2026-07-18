@@ -2,8 +2,8 @@ import streamlit as st
 import google.generativeai as genai
 
 # 1. Konfigurasi Halaman Aplikasi
-st.set_page_config(page_title="Asisten Pembelajaran", page_icon="book")
-st.title("Asisten AI untuk Desain Pembelajaran")
+st.set_page_config(page_title="Tutor AI", page_icon="book")
+st.title("Tutor AI Bimbel TPA")
 
 # 2. Pengaturan Keamanan API Key
 # Kunci diambil dari fail konfigurasi rahasia Streamlit
