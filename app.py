@@ -19,7 +19,7 @@ Gunakan bahasa yang formal, objektif, dan jelas. Berikan umpan balik yang konstr
 
 # Inisialisasi Model AI
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash",
+    model_name="gemini-3.5-flash",
     system_instruction=instruksi_sistem
 )
 
