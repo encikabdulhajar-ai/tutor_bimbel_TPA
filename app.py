@@ -1,49 +1,49 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. Konfigurasi Halaman Aplikasi
-st.set_page_config(page_title="Tutor AI", page_icon="book")
-st.title("Tutor AI Bimbel TPA")
+# Konfigurasi Halaman
+st.set_page_config(page_title="Tutor AI Bimbel TPA", page_icon="📝")
+st.title("Tutor AI Bimbingan Belajar TPA")
+st.write("Sistem evaluasi Tes Potensi Akademik. Ketik instruksi Anda untuk memulai sesi latihan.")
 
-# 2. Pengaturan Keamanan API Key
-# Kunci diambil dari fail konfigurasi rahasia Streamlit
+# Autentikasi Keamanan API
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# 3. Penyusunan Instruksi Sistem
-# Teks ini menggantikan pengaturan instruksi pada GEMS Bapak
+# Instruksi Sistem Akademis
 instruksi_sistem = """
-Anda adalah asisten akademik ahli yang membantu penyusunan materi pendidikan.
-Fokus utama Anda adalah integrasi metode STEAM (Science, Technology, Engineering, Arts, and Mathematics) 
-dan pengembangan kurikulum muatan lokal budaya Melayu Kepulauan Riau.
-Berikan informasi yang akurat, terstruktur, dan gunakan bahasa yang formal serta mudah dipahami.
+Anda adalah tutor ahli untuk Bimbingan Belajar Tes Potensi Akademik (TPA).
+Tugas Anda adalah memberikan soal latihan, mengevaluasi jawaban, dan memberikan pembahasan akademis yang akurat untuk materi logika, verbal, dan numerik.
+Gunakan bahasa yang formal, objektif, dan jelas. Berikan umpan balik yang konstruktif dan berikan contoh konkret bila diperlukan.
 """
 
-# 4. Inisialisasi Model Bahasa
+# Inisialisasi Model AI
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction=instruksi_sistem
 )
 
-# 5. Manajemen Memori Percakapan (Session State)
+# Manajemen Memori Percakapan
 if "chat_session" not in st.session_state:
     st.session_state.chat_session = model.start_chat(history=[])
 
-# Menampilkan riwayat percakapan sebelumnya di layar
 for message in st.session_state.chat_session.history:
     role = "user" if message.role == "user" else "assistant"
     with st.chat_message(role):
         st.markdown(message.parts[0].text)
 
-# 6. Kolom Masukan Pengguna
-user_input = st.chat_input("Ketik pertanyaan atau instruksi tugas di sini...")
+# Interaksi Pengguna
+user_input = st.chat_input("Ketik 'Saya ingin belajar' atau ajukan pertanyaan di sini...")
 
 if user_input:
-    # Menampilkan teks yang diketik pengguna
     with st.chat_message("user"):
         st.markdown(user_input)
     
-    # Mengirim teks ke server Google dan menampilkan hasil analisis
     with st.chat_message("assistant"):
-        response = st.session_state.chat_session.send_message(user_input)
-        st.markdown(response.text)
+        try:
+            # Mengirim data ke peladen
+            response = st.session_state.chat_session.send_message(user_input)
+            st.markdown(response.text)
+        except Exception as e:
+            # Mengelola galat jika peladen gagal merespons
+            st.error(f"Terjadi kendala teknis pada sistem API: {e}. Silakan periksa kembali pengaturan Anda.")
